@@ -1,9 +1,9 @@
 # Laboratorio de Semana 2
 
-| Problem                                                                                           | Code Solution                      | Analisys                                                                                     |
+| Problem                                                                                           | Code Solution                      | Analysis                                                                                     |
 | ------------------------------------------------------------------------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------- |
 | [A. Sasha and the Beautiful Array (Codeforces)](https://codeforces.com/problemset/problem/1929/A) | [sasha_array.cpp](sasha_array.cpp) | [A. Sasha and the Beautiful Array (Codeforces)](#a-sasha-and-the-beautiful-array-codeforces) |
-| [RKS - RK Sorting](https://www.spoj.com/problems/RKS/)                                            | [rks.cpp](rks.cpp)                 |
+| [RKS - RK Sorting](https://www.spoj.com/problems/RKS/)                                            | [rks.cpp](rks.cpp)                 | [RKS - RK Sorting (Spoj)](#rks-sorting)                                                      |
 
 # A. Sasha and the Beautiful Array (Codeforces)
 
