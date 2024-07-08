@@ -261,8 +261,8 @@ int main(int argc, char const *argv[])
     RedBlackTree T;
 
     // Fast input/output
-    cin.sync_with_stdio(false);
-    cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     cin >> N >> Q;
 
@@ -281,7 +281,7 @@ int main(int argc, char const *argv[])
     {
         cin >> query;
 
-        printf("%d\n", T.find(T.root, query));
+        cout << T.find(T.root, query) << "\n";
     }
 
     return 0;
