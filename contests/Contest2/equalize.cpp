@@ -1,60 +1,73 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include <unordered_map>
+#include <algorithm>
 
 using namespace std;
 
-int max_reps(vector<int> a);
+// O(n! * n)
 
-int main(int argc, char const *argv[])
+// Function to return the maximum number of times any element repeats
+// in the array after adding a permutation to its elements.
+int max_reps_backtracking(vector<int> &a, int index, unordered_map<int, int> &frequency, int &max_count);
+
+int main()
 {
-    // Fast i/o (i think it's still n!)
+    // Fast input/output configuration
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int t, n, mfoe;
-    vector<int> a;
+    int t, n, mfoe; // t: number of test cases, n: size of the array, mfoe: max frequency of elements
+    vector<int> a;  // Vector to store the array
 
-    cin >> t;
+    cin >> t; // Read the number of test cases
 
     while (t--)
     {
-        cin >> n;
+        cin >> n; // Read the size of the array
 
-        a.resize(n);
+        a.resize(n); // Resize the vector to size n
 
+        // Read the elements of the array
         for (int i = 0; i < n; i++)
         {
             cin >> a[i];
         }
 
-        sort(a.begin(), a.end());
+        mfoe = 0;                          // Initialize the max frequency of elements to 0
+        unordered_map<int, int> frequency; // Map to count the frequency of each element
 
-        mfoe = 0;
+        // Call the backtracking function to calculate the max frequency of elements
+        max_reps_backtracking(a, 0, frequency, mfoe);
 
-        do
-        {
-            mfoe = max(mfoe, max_reps(a));
-        } while (next_permutation(a.begin(), a.end()));
-
-        cout << mfoe << "\n";
+        cout << mfoe << "\n"; // Print the result for the current test case
     }
 
     return 0;
 }
 
-int max_reps(vector<int> a)
+// Function to calculate the maximum number of times any element repeats
+// after adding a permutation to the elements of the array using backtracking
+int max_reps_backtracking(vector<int> &a, int index, unordered_map<int, int> &frequency, int &max_count)
 {
-    int result = -1, current;
-    unordered_map<int, int> frequency;
-
-    for (int i = 0; i < a.size(); i++)
+    if (index == a.size())
     {
-        current = ++frequency[a[i] + i + 1];
-
-        result = max(result, current);
+        return max_count;
     }
 
-    return result;
+    for (int i = index; i < a.size(); ++i)
+    {
+        swap(a[index], a[i]);                       // Swap to create a new permutation
+        int key = a[index] + (index + 1);           // Calculate the new element
+        frequency[key]++;                           // Increment the counter for the element
+        max_count = max(max_count, frequency[key]); // Update the max frequency of elements
+
+        // Recurse with the next index
+        max_reps_backtracking(a, index + 1, frequency, max_count);
+
+        frequency[key]--;     // Decrement the counter to backtrack
+        swap(a[index], a[i]); // Swap back to restore the array
+    }
+
+    return max_count; // Return the result
 }
