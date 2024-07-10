@@ -1,89 +1,58 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
-#include <algorithm>
+#include <map>
+#include <set>
 
 using namespace std;
 
-void backtrack(vector<int> &a, int index, unordered_map<int, int> &frequency, int &max_count, int &global_max);
-
-int max_reps(vector<int> &a);
-
+/**
+ * This is still inefficient
+ * Time O(n^2)
+ * Memory: O(n^2)
+ */
 int main()
 {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int t, n, mfoe;
-    vector<int> a;
+    int t, n, ai;
 
-    cin >> t;
+    // Map to store the frequency of keys where each key is calculated as ai + p
+    // The set<int> stores the positions (p) in which the number appears.
+    // Since a set does not allow duplicates, the size of the set gives us the frequency
+    // of the key in different positions, effectively the frequency in a permutation.
+    map<int, set<int>> frequency;
+
+    cin >> t; // Read the number of test cases
 
     while (t--)
     {
-        cin >> n;
+        cin >> n; // Read the size of the array for the current test case
 
-        a.resize(n);
+        int max_count = 0;
 
+        // Iterate through each element in the array
         for (int i = 0; i < n; i++)
         {
-            cin >> a[i];
+            cin >> ai; // Read the current element
+
+            // Iterate through all possible positions (1 to n)
+            for (int p = 1; p <= n; p++)
+            {
+                int key = ai + p;         // Calculate the key as the sum of the element and the position
+                frequency[key].insert(p); // Insert the position into the set for this key
+
+                // Update the maximum frequency count
+                max_count = max(max_count, static_cast<int>(frequency[key].size()));
+            }
         }
 
-        mfoe = max_reps(a);
+        // Output the maximum frequency count for this test case
+        cout << max_count << "\n";
 
-        cout << mfoe << "\n";
+        // Clear the frequency map for the next test case
+        frequency.clear();
     }
 
     return 0;
-}
-
-int max_reps(vector<int> &a)
-{
-    int n = a.size();
-    unordered_map<int, int> frequency;
-    int max_count = 0;
-    int global_max = 0;
-    backtrack(a, 0, frequency, max_count, global_max);
-    return global_max;
-}
-
-/**
- * Function to return the maximum number of times any element repeats in the
- * array after adding a permutation to its elements using backtracking and
- * pruning.
- */
-void backtrack(vector<int> &a, int index, unordered_map<int, int> &frequency, int &max_count, int &global_max)
-{
-    if (index == a.size())
-    {
-        global_max = max(global_max, max_count);
-        return;
-    }
-
-    for (int i = index; i < a.size(); ++i)
-    {
-        swap(a[index], a[i]);             // Swap to create a new permutation
-        int key = a[index] + (index + 1); // Calculate the new element
-        frequency[key]++;                 // Increment the counter for the element
-
-        if (frequency[key] > max_count)
-        {
-            max_count = frequency[key]; // Update the max frequency of elements
-        }
-
-        // Only recurse if the current maximum frequency is promising
-        if (max_count + a.size() - index - 1 > global_max)
-        {
-            backtrack(a, index + 1, frequency, max_count, global_max);
-        }
-
-        frequency[key]--; // Decrement the counter to backtrack
-        if (frequency[key] == 0)
-        {
-            frequency.erase(key); // Clean up the map
-        }
-
-        swap(a[index], a[i]); // Swap back to restore the array
-    }
 }
